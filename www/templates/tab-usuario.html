@@ -1,0 +1,201 @@
+<ion-modal-view >
+    <ion-header-bar class="bar bar-header {{tema}}" >
+    <h1 class="title">Dados do usuário  #{{idusuario}}</h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-disabled="!usuario.idusuario" ng-click="closeUsuario()">Fechar</button>
+    </div>
+  </ion-header-bar>
+  <ion-content class="fundo">
+
+
+
+    <div class="list">
+    <!--
+       <img ng-src="{{usuario.foto_perfil}}" class="foto-avatar" ng-click="mostraFoto(usuario.foto_perfil,'Perfil')" ng-model="usuario.foto_perfil" ng-click="carregarFotoPerfil()" >
+-->
+
+       <img ng-src="{{usuario.foto_perfil}}" class="foto-avatar" ng-click="cameraPopupPerfil()" ng-model="usuario.foto_perfil">
+
+       <progress max="100" value="{{currentPercentage}}"></progress>
+
+    <div style="color: red">
+      <div ng-show="usuarioForm.nome.$invalid && usuarioForm.nome.$dirty">
+        <i class="icon ion-alert-circled"></i> Nome com no mínimo 10 letras...
+      </div>
+
+      <div ng-show="usuarioForm.endereco.$invalid && usuarioForm.endereco.$dirty">
+        <i class="icon ion-alert-circled"></i> Preencha seu endereço...
+      </div>
+      <div ng-show="usuarioForm.idbairro.$invalid && usuarioForm.idbairro.$dirty">
+        <i class="icon ion-alert-circled"></i> Por favor selecione um bairro.
+      </div>
+
+      <div ng-show="usuarioForm.telefone.$invalid && usuarioForm.telefone.$dirty">
+        <i class="icon ion-alert-circled"></i> Telefone com o formato 99999999...
+      </div>
+
+      <div ng-show="usuarioForm.tipo.$invalid && usuarioForm.tipo.$dirty">
+        <i class="icon ion-alert-circled"></i> Preencha um tipo de usuário válido...
+      </div>
+
+      <div ng-show="usuarioForm.termo.$invalid && usuarioForm.termo.$dirty">
+        <i class="icon ion-alert-circled"></i> Confirme o termo de uso.
+      </div>
+      <div ng-show="usuarioForm.localizacao.$invalid && usuarioForm.localizacao.$dirty">
+        <i class="icon ion-alert-circled"></i> Seu GPS tem que esta ligado.
+      </div>
+    </div>
+
+  <form name="usuarioForm">
+          <label class="item item-input item-select" >
+           <div class="input-label"><i class="icon ion-transgender" ></i></div>
+           <select ng-model="usuario.tipo" ng-required="true" name="tipo">
+            <option value="">Tipo de Usuário</option>
+            <option value="Residencial"selected>Residencial</option>
+            <option value="Comercial">Comercial</option>
+            <option value="Ponto">Ponto de entrega voluntária</option>
+           </select>
+          </label>
+
+         <div  ng-if="usuario.tipo == 'Comercial'" >
+           <label class="item item-input item-select" >
+            <div class="input-label"><i class="icon ion-help-circled" ></i></div>
+              <select  ng-model="usuario.idcoletor" name="idcoletor" ng-required="true">
+                 <option value="">Coletor</option>
+                 <option ng-repeat="pegacoletor in listaColetor" value="{{pegacoletor.idcoletor}}">{{pegacoletor.nome}}</option>
+             </select>
+           </label>
+        </div>
+
+          <label class="item item-input">
+            <i class="icon ion-happy placeholder-icon"></i>
+            <input type="text" placeholder="Nome..." name="nome" ng-model="usuario.nome" ng-minlength="10" ng-required="true" >
+          </label>
+
+          <label class="item item-input">
+            <i class="icon ion-happy placeholder-icon"></i>
+            <input type="text" placeholder="Endereço..." name="endereco" ng-model="usuario.endereco" ng-minlength="10" ng-required="true" >
+          </label>
+
+
+          <label class="item item-input item-select" >
+           <div class="input-label"><i class="icon ion-help-circled" ></i></div>
+
+          <select  ng-model="usuario.idbairro" name="idbairro" ng-required="true">
+             <option value="">Bairro</option>
+             <option ng-repeat="pegabairro in listaBairro" value="{{pegabairro.idbairro}}">{{pegabairro.nome}}</option>
+         </select>
+         </label>
+<!--
+         <label class="item item-input item-select" >
+          <div class="input-label"><i class="icon ion-help-circled" ></i></div>
+
+         <select  ng-model="usuario.idcidade" name="idcidade" ng-required="true">
+            <option value="">Cidade</option>
+            <option ng-repeat="pegacidade in listaCidade" value="{{pegacidade.idcidade}}">{{pegacidade.nome}}</option>
+        </select>
+        </label>
+-->
+
+         <label class="item item-input">
+            <i class="icon ion-ios-telephone placeholder-icon"></i>
+  <!--        <input type="text" placeholder="Telefone...99-99999999" name="telefone" ng-model="usuario.telefone" ng-required="true" ng-pattern="/^\d{2}-\d{4,5}\d{4}$/">
+  -->       <input type="text" placeholder="Telefone...99999999" name="telefone" ng-model="usuario.telefone" ng-required="true" ng-pattern="/^\d{4,5}\d{4}$/">
+          </label>
+
+
+
+<!--
+          <label class="item item-input">
+            <i class="icon ion-email placeholder-icon"></i>
+            <input type="email" placeholder="Email..." name="email" ng-model="usuario.email" ng-disabled="usuario.idusuario" ng-required="true" capitalize>
+          </label>
+
+           <label class="item item-input" style="color:gray">Data de Nascimento... <input type="date" placeholder="Data de Nascimento..."  ng-model="usuario.data_nascimento" ng-required="true" name="data_nascimento" >
+          </label>
+          <label class="item item-input">
+            <i class="icon ion-android-lock placeholder-icon"></i>
+            <input type="password" placeholder="Senha..." name="senha" ng-model="usuario.senha" ng-required="true">
+          </label>
+-->
+        <!--
+
+          <label class="item item-input">
+            <i class="icon ion-ios-telephone placeholder-icon"></i>
+        <input type="text" placeholder="Telefone...99-99999999" name="telefone" ng-model="usuario.telefone" ng-required="true" ng-pattern="/^\d{2}-\d{4,5}\d{4}$/">
+          </label>
+          -->
+
+  <!--
+       <label class="item item-input item-select" >
+        <div class="input-label"><i class="icon ion-help-circled" ></i></div>
+
+       <select  ng-model="usuario.idindicacao" name="idindicacao" ng-required="true">
+          <option value="">Conheceu esta App?</option>
+          <option ng-repeat="pegaindicacao in listaIndicacao" value="{{pegaindicacao.idindicacao}}">{{pegaindicacao.nome}}</option>
+      </select>
+      </label>
+
+-->
+      <label class="item item-input">
+        <i class="icon ion-location placeholder-icon" ng-click="pegaLocal()" ></i>
+        <input type="text" ng-click="pegaLocal()" name="localizacao" placeholder="Ligue o GPS e ckick aqui!" ng-model="usuario.localizacao" ng-required="true" readonly="true">
+      </label>
+
+     <li class="item item-toggle">
+      Aceito os termos de uso
+     <label class="toggle toggle-assertive">
+       <input name="termo" ng-model="usuario.termo" type="checkbox" ng-required="true">
+       <div class="track">
+         <div class="handle"></div>
+       </div>
+     </label>
+
+     </li>
+     <ion-list class="listar-item" >
+
+      <ion-item menu-close class="listar-item-clear" style="color:blue" ng-href="http://www.portalexata.com.br/termo.html">
+      <i class="ion-ios-book" ></i>
+         TERMO E CONDIÇÕES DE USO
+        </ion-item>
+
+
+      </ion-list>
+ </form>
+  </div>
+
+
+
+     <div class="button-bar">
+      <a class="button button-block {{btn_tema}} ion-upload" ng-disabled="usuarioForm.$invalid"  ng-click="verificaUsuario(usuario)"> Gravar</a>
+  <!--
+      <a class="button button-block {{btn_tema}} ion-android-camera" ng-disabled="!{{idusuario}}" ng-click="perfilPopup()"> Selecione Foto</a>
+    </div>
+   -->
+
+  <!--
+      </label>
+        <label class="item item-input">
+        <input type="text" placeholder="Telefone... 9999-9999" name="telefone" ng-model="telefone" ng-required="true" ng-pattern="/^\d{4,5}-\d{4}$/">
+      </label>
+    <div ng-messages="msgForm.descricao.$error">
+      <div ng-message="required">
+        por favor preencha os dados
+      </div>
+      <div ng-message="minlength">
+        por favor preencha no mínimo 10 caracteres
+      </div>
+    </div>
+
+
+    <div ng-show="msgForm.endereco.$invalid && msgForm.endereco.$dirty">
+      por favor preencha os dados
+    </div>
+    <div ng-show="msgForm.telefone.$error.pattern">
+      por favor preencha os dados do telefone corretamente Ex: 9999-9999
+    </div>
+
+-->
+
+  </ion-content>
+</ion-modal-view>
